@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Greet & JSON Validator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+
+    .box form,
+    .box .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 150px;
+      resize: vertical;
+      font-family: monospace;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .valid {
+      color: green;
+    }
+
+    .invalid {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>All-in-One Page</h1>
+
+  <div class="container">
+    <!-- Greet User Section -->
+    <div class="box">
+      <h2>Welcome</h2>
+      <form id="greetForm">
+        <input type="text" id="username" placeholder="Enter your name" required />
+        <button type="submit">Submit</button>
+        <button type="button" id="resetGreet">Reset</button>
+      </form>
+      <div id="greetResult" class="result"></div>
+    </div>
+
+    <!-- JSON Validator Section -->
+    <div class="box">
+      <h2>JSON Validator</h2>
+      <textarea id="jsonInput" placeholder="Enter JSON here..."></textarea>
+      <div class="buttons">
+        <button id="validateJson">Submit</button>
+        <button id="resetJson">Reset</button>
+      </div>
+      <div id="jsonResult" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- Greet Feature ---
+    const greetForm = document.getElementById('greetForm');
+    const usernameInput = document.getElementById('username');
+    const greetResult = document.getElementById('greetResult');
+    const resetGreet = document.getElementById('resetGreet');
+
+    greetForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = usernameInput.value.trim();
+      if (name) {
+        greetResult.textContent = `Hello ${name}`;
+        greetResult.className = 'result';
+      }
+    });
+
+    resetGreet.addEventListener('click', () => {
+      usernameInput.value = '';
+      greetResult.textContent = '';
+    });
+
+    // --- JSON Validator Feature ---
+    const validateBtn = document.getElementById('validateJson');
+    const resetJsonBtn = document.getElementById('resetJson');
+    const jsonInput = document.getElementById('jsonInput');
+    const jsonResult = document.getElementById('jsonResult');
+
+    validateBtn.addEventListener('click', () => {
+      const jsonText = jsonInput.value.trim();
+      try {
+        JSON.parse(jsonText);
+        jsonResult.textContent = 'Valid JSON';
+        jsonResult.className = 'result valid';
+      } catch (e) {
+        jsonResult.textContent = 'Invalid JSON';
+        jsonResult.className = 'result invalid';
+      }
+    });
+
+    resetJsonBtn.addEventListener('click', () => {
+      jsonInput.value = '';
+      jsonResult.textContent = '';
+      jsonResult.className = 'result';
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Greet User via API</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    #greeting {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="greetForm">
+    <input type="text" id="username" placeholder="Enter your name" required />
+    <button type="submit">Submit</button>
+    <button type="button" id="resetBtn">Reset</button>
+  </form>
+
+  <div id="greeting"></div>
+
+  <script>
+    const form = document.getElementById('greetForm');
+    const input = document.getElementById('username');
+    const greetingDiv = document.getElementById('greeting');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Handle form submission
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = input.value.trim();
+      if (!name) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/greet', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name })
+        });
+
+        const data = await response.json();
+        greetingDiv.textContent = data.message;
+      } catch (err) {
+        greetingDiv.textContent = 'Error: Could not connect to server';
+        console.error(err);
+      }
+    });
+
+    // Handle Reset button click
+    resetBtn.addEventListener('click', () => {
+      input.value = '';              // Clear input field
+      greetingDiv.textContent = '';  // Clear greeting message
+    });
+  </script>
+
+</body>
+</html>
